@@ -46,6 +46,7 @@ const Login = () => {
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
+      console.log(user);
 
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
@@ -83,7 +84,7 @@ const Login = () => {
           <div className="login button-container">
             <Button
               disabled={!username || !name}
-              width="100%"
+              width={100}
               onClick={() => doLogin()}
             >
               Login
@@ -91,7 +92,7 @@ const Login = () => {
           </div>
           {showRegister &&
             <div className="login button-container"><Button
-              width="100%"
+              width={100}
               onClick={() => navigate("/register")}
             >
               Register

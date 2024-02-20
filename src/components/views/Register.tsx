@@ -7,12 +7,6 @@ import "styles/views/Register.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
 const FormField = (props) => {
   return (
     <div className="register field">
@@ -84,7 +78,7 @@ const Register = () => {
           <div className="register button-container">
             <Button
               disabled={!username || !name}
-              width="100%"
+              width={100}
               onClick={() => doRegister()}
             >
               Register
@@ -92,7 +86,7 @@ const Register = () => {
           </div>
           {showLogin && <div className="register button-container">
             <Button
-              width="100%"
+              width={100}
               onClick={() => () => navigate("/login")}
             >
               Login
