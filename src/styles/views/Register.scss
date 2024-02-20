@@ -1,6 +1,6 @@
 @import "../theme";
 
-.login {
+.register {
   &.container {
     margin-top: 2em;
     min-height: 300px;
@@ -48,8 +48,5 @@
     display: flex;
     justify-content: center;
     margin-top: 2em;
-  }
-  &.msg {
-    color: red;
   }
 }

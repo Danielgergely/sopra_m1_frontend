@@ -3,7 +3,7 @@ import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
-import "styles/views/Login.scss";
+import "styles/views/Register.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 
@@ -15,10 +15,10 @@ specific components that belong to the main one in the same file.
  */
 const FormField = (props) => {
   return (
-    <div className="login field">
-      <label className="login label">{props.label}</label>
+    <div className="register field">
+      <label className="register label">{props.label}</label>
       <input
-        className="login input"
+        className="register input"
         placeholder="enter here.."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -33,16 +33,17 @@ FormField.propTypes = {
   onChange: PropTypes.func,
 };
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
-  const [showRegister, setShowRegister] = useState<boolean>(false);
+  const [showLogin, setShowLogin] = useState<boolean>(false);
   const [message, setMessage] = useState<string>(null);
 
-  const doLogin = async () => {
+  const doRegister = async () => {
     try {
-      const response = await api.get("/user/username?username=" + username);
+      const requestBody = JSON.stringify({ username, name });
+      const response = await api.post("/users", requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -53,9 +54,9 @@ const Login = () => {
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/game");
     } catch (error) {
-      if (error.response.data.status === 404) {
-        setMessage(`${error.response.data.message} \n Please check your entries, or register a new user.`);
-        setShowRegister(true);
+      if (error.response.status === 400) {
+        setMessage(`${error.response.data.message} \n Try logging in.`);
+        setShowLogin(true);
       } else {
         alert(
           `Something went wrong during the login: \n${handleError(error)}`,
@@ -67,8 +68,8 @@ const Login = () => {
 
   return (
     <BaseContainer>
-      <div className="login container">
-        <div className="login form">
+      <div className="register container">
+        <div className="register form">
           <FormField
             label="Username"
             value={username}
@@ -80,23 +81,23 @@ const Login = () => {
             onChange={(n) => setName(n)}
           />
           <div className="login msg">{message}</div>
-          <div className="login button-container">
+          <div className="register button-container">
             <Button
               disabled={!username || !name}
               width="100%"
-              onClick={() => doLogin()}
-            >
-              Login
-            </Button>
-          </div>
-          {showRegister &&
-            <div className="login button-container"><Button
-              width="100%"
-              onClick={() => navigate("/register")}
+              onClick={() => doRegister()}
             >
               Register
             </Button>
-            </div>}
+          </div>
+          {showLogin && <div className="register button-container">
+            <Button
+              width="100%"
+              onClick={() => () => navigate("/login")}
+            >
+              Login
+            </Button>
+          </div>}
         </div>
       </div>
     </BaseContainer>
@@ -106,4 +107,4 @@ const Login = () => {
 /**
  * You can get access to the history object's properties via the useLocation, useNavigate, useParams, ... hooks.
  */
-export default Login;
+export default Register;

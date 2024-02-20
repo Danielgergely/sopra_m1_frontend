@@ -4,6 +4,7 @@ import {GameGuard} from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
+import Register from "../../views/Register";
 
 /**
  * Main router of your application.
@@ -12,7 +13,7 @@ import Login from "../../views/Login";
  * The main difference between these two routes is the following:
  * /login renders another component without any sub-route
  * /game renders a Router that contains other sub-routes that render in turn other react components
- * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial 
+ * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
  */
 const AppRouter = () => {
   return (
@@ -25,6 +26,10 @@ const AppRouter = () => {
 
         <Route path="/login" element={<LoginGuard />}>
           <Route path="/login" element={<Login/>} />
+        </Route>
+
+        <Route path="/register" element={<LoginGuard />}>
+          <Route path="/register" element={<Register/>} />
         </Route>
 
         <Route path="/" element={
