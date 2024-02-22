@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import { Button } from "components/ui/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
@@ -11,7 +11,7 @@ import PlayerProfile from "./Profile";
 
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
-    <div className="player username">{user.username}</div>
+    <div className="player username"><Link to={`/profile/${user.id}`}>{user.username}</Link></div>
     <div className="player name">{user.name}</div>
     <div className="player id">id: {user.id}</div>
   </div>
@@ -26,7 +26,6 @@ const Game = () => {
   const navigate = useNavigate();
 
   const [users, setUsers] = useState<User[]>(null);
-  const [activeUser, setActiveUser] = useState<User>(null);
 
   const logout = (): void => {
     localStorage.removeItem("token");
@@ -39,9 +38,6 @@ const Game = () => {
       try {
         const response = await api.get("/users");
 
-        // delays continuous execution of an async operation for 1 second.
-        // This is just a fake async call, so that the spinner can be displayed
-        // feel free to remove it :)
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Get the returned users and update the state.
@@ -63,20 +59,6 @@ const Game = () => {
     fetchData().then();
   }, []);
 
-  const showActiveUser = (user: {
-    username?: string;
-    name?: string;
-    id: any;
-    creationDate?: string;
-    birthDate?: string;
-  }) => {
-    if (activeUser && user.id === activeUser.id) {
-      setActiveUser(null);
-    } else {
-      setActiveUser(user);
-    }
-  };
-
   let content = <Spinner />;
 
   if (users) {
@@ -84,7 +66,7 @@ const Game = () => {
       <div className="game">
         <ul className="game user-list">
           {users.map((user: User) => (
-            <li key={user.id} onClick={() => showActiveUser(user)}>
+            <li key={user.id}>
               <Player user={user} />
             </li>
           ))}
@@ -103,7 +85,6 @@ const Game = () => {
         Get all users from secure endpoint:
       </p>
       {content}
-      {activeUser && <PlayerProfile user={activeUser} edit={localStorage.getItem("token") === activeUser.token} />}
     </BaseContainer>
   );
 };

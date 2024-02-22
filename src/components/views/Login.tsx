@@ -42,7 +42,7 @@ const Login = () => {
 
   const doLogin = async () => {
     try {
-      const response = await api.get("/user/username?username=" + username);
+      const response = await api.get("/users/username?username=" + username);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);

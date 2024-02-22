@@ -49,6 +49,10 @@
   &.username {
     font-weight: 500;
     color: $accent;
+    & a {
+      text-decoration: none !important;
+      color: $accent !important;
+    }
   }
   &.id {
     margin-left: auto;

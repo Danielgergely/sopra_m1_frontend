@@ -6,16 +6,18 @@ import { User as UserType } from "types";
 import User from "models/User";
 import { Button } from "../ui/Button";
 import { api, handleError } from "helpers/api";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ActivePlayer({ user, edit }: {
   user: UserType,
   edit: boolean
 }) {
+  const navigate = useNavigate();
   const [changed, setChanged] = useState<boolean>(false);
   const [id, setId] = useState<string>(user.id);
   const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
-  const [birthDate, setBirthDate] = useState<string>( null);
+  const [birthDate, setBirthDate] = useState<string>(null);
   const [message, setMessage] = useState<string>("");
   const [initialRender, setInitialRender] = useState(true);
 
@@ -32,9 +34,9 @@ function ActivePlayer({ user, edit }: {
       /*if (error.response.data.status === 404) {
         setMessage(`${error.response.data.message} \n User not found.`);
       } else {*/
-        alert(
-          `Something went wrong during the login: \n${handleError(error)}`,
-        );
+      alert(
+        `Something went wrong during the login: \n${handleError(error)}`,
+      );
       /*}*/
     }
   }
@@ -49,6 +51,10 @@ function ActivePlayer({ user, edit }: {
 
   return (
     <>
+      <Button
+        width={100}
+        onClick={() => navigate("/game")}>
+        Back to game!</Button>
       <div className="active-player container">
         <div className="active-player id">
           <div>Id:</div>
@@ -92,11 +98,28 @@ ActivePlayer.propTypes = {
   user: PropTypes.object,
 };
 
-function PlayerProfile({ user, edit }: { user: UserType, edit: boolean }) {
+function PlayerProfile() {
+  const { userId } = useParams();
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      console.log(userId);
+      const response = await api.get("/users/" + userId);
+      const userResponse = new User(response.data);
+      setUser(userResponse);
+    }
+
+    fetchUser().then();
+  }, [userId]);
+
 
   return (
     <BaseContainer className="profile container">
-      <ActivePlayer user={user} edit={edit}/>
+      {user !== null &&
+        <ActivePlayer user={user}
+                      edit={localStorage.getItem("token") === user.token} />}
     </BaseContainer>
   );
 }
