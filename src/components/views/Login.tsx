@@ -21,6 +21,7 @@ const FormField = (props) => {
         className="login input"
         placeholder="enter here.."
         value={props.value}
+        type={props.password ? "password" : "text"}
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -30,19 +31,20 @@ const FormField = (props) => {
 FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
+  password: PropTypes.boolean,
   onChange: PropTypes.func,
 };
 
 const Login = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
+  const [password, setPassword] = useState<string>(null);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [message, setMessage] = useState<string>(null);
 
   const doLogin = async () => {
     try {
-      const response = await api.get("/users/username?username=" + username);
+      const response = await api.get("/users/login?username=" + username +"&password=" + password);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -72,18 +74,20 @@ const Login = () => {
         <div className="login form">
           <FormField
             label="Username"
+            password={false}
             value={username}
             onChange={(un: string) => setUsername(un)}
           />
           <FormField
-            label="Name"
-            value={name}
-            onChange={(n) => setName(n)}
+            label="Password"
+            value={password}
+            password={true}
+            onChange={(p) => setPassword(p)}
           />
           <div className="login msg">{message}</div>
           <div className="login button-container">
             <Button
-              disabled={!username || !name}
+              disabled={!username || !password}
               width={100}
               onClick={() => doLogin()}
             >

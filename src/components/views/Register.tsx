@@ -15,6 +15,7 @@ const FormField = (props) => {
         className="register input"
         placeholder="enter here.."
         value={props.value}
+        type={props.password ? "password" : "text"}
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -24,6 +25,7 @@ const FormField = (props) => {
 FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
+  password: PropTypes.boolean,
   onChange: PropTypes.func,
 };
 
@@ -31,12 +33,13 @@ const Register = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
+  const [password, setPassword] = useState<string>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [message, setMessage] = useState<string>(null);
 
   const doRegister = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name });
+      const requestBody = JSON.stringify({ username, name, password });
       const response = await api.post("/users", requestBody);
 
       // Get the returned user and update a new object.
@@ -67,12 +70,20 @@ const Register = () => {
           <FormField
             label="Username"
             value={username}
+            password={false}
             onChange={(un: string) => setUsername(un)}
           />
           <FormField
             label="Name"
             value={name}
+            password={false}
             onChange={(n) => setName(n)}
+          />
+          <FormField
+            label="Password"
+            value={password}
+            password={true}
+            onChange={(p) => setPassword(p)}
           />
           <div className="login msg">{message}</div>
           <div className="register button-container">
