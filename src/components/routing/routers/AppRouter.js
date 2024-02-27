@@ -33,7 +33,7 @@ const AppRouter = () => {
           <Route path="/register" element={<Register />} />
         </Route>
 
-          <Route path="/profile/:userId" element={<PlayerProfile />}/>
+        <Route path="/profile/:userId" element={<PlayerProfile />} />
 
         <Route path="/" element={
           <Navigate to="/game" replace />

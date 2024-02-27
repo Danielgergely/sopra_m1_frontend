@@ -44,6 +44,7 @@ function ActivePlayer({ user, edit }: {
   useEffect(() => {
     if (initialRender) {
       setInitialRender(false);
+
       return;
     }
     setChanged(true);
@@ -62,8 +63,7 @@ function ActivePlayer({ user, edit }: {
         </div>
         <div className="active-player username">
           <div>Username:</div>
-          <input key="username" defaultValue={user.username} disabled={!edit}
-                 onChange={(e) => setUsername(e.target.value)} />
+          <input key="username" defaultValue={user.username} disabled={!edit} onChange={(e) => setUsername(e.target.value)} />
         </div>
         <div className="active-player name">
           <div>Name:</div>
@@ -75,8 +75,7 @@ function ActivePlayer({ user, edit }: {
         </div>
         <div className="active-player birth-date">
           <div>Birth date:</div>
-          <input key="birthDate" defaultValue={user.birthDate} disabled={!edit}
-                 onChange={(e) => setBirthDate(e.target.value)} />
+          <input key="birthDate" defaultValue={user.birthDate} disabled={!edit} onChange={(e) => setBirthDate(e.target.value)} />
         </div>
         <div className="active-player status">
           <div>Status:</div>
@@ -114,12 +113,10 @@ function PlayerProfile() {
     fetchUser().then();
   }, [userId]);
 
-
   return (
     <BaseContainer className="profile container">
       {user !== null &&
-        <ActivePlayer user={user}
-                      edit={localStorage.getItem("token") === user.token} />}
+        <ActivePlayer user={user} edit={localStorage.getItem("token") === user.token} />}
     </BaseContainer>
   );
 }
